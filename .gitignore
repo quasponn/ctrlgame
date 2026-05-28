@@ -1,0 +1,8 @@
+node_modules/
+backend/db.sqlite
+backend/.env
+.env
+*.log
+frontend/dist/
+.DS_Store
+coverage/

@@ -1,0 +1,11 @@
+npx nodemon server.js
+cd C:\Users\bulka\game-library\backend
+node seed.js
+
+admin
+admin123
+
+user
+user123
+
+http://localhost:3001/
