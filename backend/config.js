@@ -7,11 +7,11 @@ if (!JWT_SECRET && process.env.NODE_ENV === 'production') {
 }
 
 function parseCorsOrigins(value) {
-  const list = String(value || 'http://localhost:5173')
+  const list = String(value || 'http://localhost:3001')
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean);
-  return list.length <= 1 ? list[0] || 'http://localhost:5173' : list;
+  return list.length <= 1 ? list[0] || 'http://localhost:3001' : list;
 }
 
 module.exports = {

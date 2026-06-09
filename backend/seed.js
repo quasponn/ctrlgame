@@ -3,13 +3,11 @@ const bcrypt = require('bcrypt');
 
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/** 5 разных картинок через picsum (уникальный seed на игру и кадр) */
 function picsumGallery(seed) {
   const slug = String(seed).replace(/\W/g, '-').toLowerCase();
   return Array.from({ length: 5 }, (_, i) => `https://picsum.photos/seed/${slug}-frame-${i}/960/540`);
 }
 
-/** Реальные скриншоты из Steam Store API */
 async function fetchSteamScreenshots(appId, cover) {
   try {
     const res = await fetch(

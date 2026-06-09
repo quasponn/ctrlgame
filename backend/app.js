@@ -12,7 +12,6 @@ const cartRoutes = require('./routes/cart');
 const libraryRoutes = require('./routes/library');
 const wishlistRoutes = require('./routes/wishlist');
 const profileRoutes = require('./routes/profile');
-const userRoutes = require('./routes/user');
 
 function createApp() {
   const app = express();
@@ -42,7 +41,6 @@ function createApp() {
   app.use('/api', libraryRoutes);
   app.use('/api', wishlistRoutes);
   app.use('/api', profileRoutes);
-  app.use('/api', userRoutes);
 
   const frontendDist = path.join(__dirname, '../frontend/dist');
   app.use(express.static(frontendDist));

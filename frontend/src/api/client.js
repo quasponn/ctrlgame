@@ -89,7 +89,6 @@ function normalizeCatalog(data) {
   return { items: [], total: 0, page: 1, pages: 1, limit: 12 };
 }
 
-/** Каталог с жанрами, поиском и пагинацией */
 async function fetchCatalog(params = {}) {
   const qs = new URLSearchParams();
   if (params.q) qs.set('q', params.q);
@@ -219,7 +218,6 @@ export const api = {
       headers: { 'Content-Type': 'application/json', ...authHeaders(token) },
       body: JSON.stringify({ currentPassword, newPassword }),
     }),
-  getGameStatus: (token) => request('/user/game-status', { headers: authHeaders(token) }),
   getCart: (token) => request('/cart', { headers: authHeaders(token) }),
   addToCart: (gameId, token) =>
     request('/cart', {
@@ -259,7 +257,6 @@ export const api = {
 
 export const DEFAULT_COVER = 'https://cdn.cloudflare.steamstatic.com/steam/apps/1222140/header.jpg';
 
-/** Цена игры для отображения в каталоге и карточках */
 export function formatGamePrice(price) {
   if (price == null) return '—';
   if (Number(price) === 0) return 'Бесплатно';

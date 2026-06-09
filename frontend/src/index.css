@@ -1,4 +1,3 @@
-/* ——— Steam design system ——— */
 :root {
   --steam-bg: #1b2838;
   --steam-bg-deep: #171a21;
@@ -38,10 +37,7 @@ a {
 
 a:hover {
   color: var(--steam-accent-hover);
-}
-
-/* ——— Header (как в Steam) ——— */
-.steam-header {
+}.steam-header {
   height: var(--steam-header-h);
   background: linear-gradient(180deg, #1b2838 0%, #171a21 100%);
   border-bottom: 1px solid var(--steam-border);
@@ -212,10 +208,7 @@ a:hover {
   display: flex;
   gap: 0.75rem;
   align-items: flex-end;
-}
-
-/* ——— Page layout ——— */
-.steam-content {
+}.steam-content {
   min-height: calc(100vh - var(--steam-header-h));
 }
 
@@ -253,10 +246,7 @@ main.steam-main {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--steam-muted);
-}
-
-/* ——— Store hero carousel ——— */
-.store-hero-carousel {
+}.store-hero-carousel {
   position: relative;
   margin: 0 -1.25rem 1.5rem;
 }
@@ -412,10 +402,7 @@ main.steam-main {
   color: #a4d007;
   margin-bottom: 1rem;
   font-weight: 600;
-}
-
-/* ——— Game tiles (магазин) ——— */
-#gamesList {
+}#gamesList {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 1rem;
@@ -610,10 +597,7 @@ main.steam-main {
 
 .steam-tile-actions .wishlist-btn {
   border-radius: 2px;
-}
-
-/* ——— Buttons ——— */
-.btn-steam-green {
+}.btn-steam-green {
   background: linear-gradient(to bottom, #75b022 5%, #588a1b 95%);
   color: #d2e885 !important;
   border: none;
@@ -857,10 +841,7 @@ button:disabled,
 .add-to-cart-btn:disabled {
   opacity: 0.55;
   cursor: not-allowed;
-}
-
-/* ——— Forms & inputs ——— */
-input,
+}input,
 textarea,
 select {
   background: rgba(0, 0, 0, 0.25);
@@ -905,10 +886,7 @@ h2 {
   letter-spacing: 0.08em;
   color: var(--steam-muted);
   margin: 0 0 1rem;
-}
-
-/* ——— Profile ——— */
-#profileInfo {
+}#profileInfo {
   background: var(--steam-bg-panel);
   border: 1px solid var(--steam-border);
   padding: 1.75rem;
@@ -997,10 +975,7 @@ h2 {
   margin-top: 1.25rem;
   padding-top: 1rem;
   border-top: 1px solid var(--steam-border);
-}
-
-/* ——— Game patches / updates ——— */
-.game-patches-section h2 {
+}.game-patches-section h2 {
   margin-bottom: 0.85rem;
 }
 
@@ -1198,10 +1173,7 @@ h2 {
   margin-top: 0.75rem;
   color: var(--steam-accent);
   min-height: 1.2em;
-}
-
-/* ——— Auth pages ——— */
-.auth-page {
+}.auth-page {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1238,10 +1210,7 @@ h2 {
 .form-error {
   color: #ff6b6b;
   font-size: 13px;
-}
-
-/* ——— Game detail page ——— */
-.game-detail-page {
+}.game-detail-page {
   max-width: 960px;
 }
 
@@ -1398,10 +1367,7 @@ h2 {
 
 .review-card b {
   color: var(--steam-accent);
-}
-
-/* ——— Modals ——— */
-.modal-overlay {
+}.modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.65);
@@ -1495,10 +1461,7 @@ h2 {
   align-items: center;
   gap: 0.35rem;
   color: var(--steam-text);
-}
-
-/* ——— Library (Steam) ——— */
-body.page-library {
+}body.page-library {
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -1812,10 +1775,7 @@ body.page-library #root {
     margin-left: -0.75rem;
     margin-right: -0.75rem;
   }
-}
-
-/* ——— Toasts ——— */
-.toast-stack {
+}.toast-stack {
   position: fixed;
   bottom: 1.25rem;
   right: 1.25rem;
@@ -1880,10 +1840,7 @@ body.page-library #root {
 
 .toast-close:hover {
   color: #fff;
-}
-
-/* ——— Skeletons ——— */
-@keyframes skeleton-pulse {
+}@keyframes skeleton-pulse {
   0%,
   100% {
     opacity: 0.45;
@@ -1926,10 +1883,7 @@ body.page-library #root {
 .skeleton-btn {
   height: 2.5rem;
   margin-top: 0.35rem;
-}
-
-/* ——— Rating & nav badges ——— */
-.game-rating-line {
+}.game-rating-line {
   margin: 0;
   font-size: 12px;
   color: #f0d060;
@@ -1969,10 +1923,7 @@ body.page-library #root {
 
 .steam-nav .nav-badge {
   margin-left: 0.25rem;
-}
-
-/* ——— Store promotions ——— */
-.store-promotions {
+}.store-promotions {
   margin-bottom: 0.5rem;
 }
 
