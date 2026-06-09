@@ -6,17 +6,10 @@ import GamePriceDisplay from './GamePriceDisplay';
 const FEATURED_COUNT = 4;
 const AUTO_MS = 7000;
 
-export default function StoreHeroCarousel({ games }) {
-  const featured = useMemo(() => games.slice(0, FEATURED_COUNT), [games]);
+function StoreHeroCarouselInner({ featured }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const count = featured.length;
-
-  const featuredKey = featured.map((g) => g.id).join(',');
-
-  useEffect(() => {
-    setIndex(0);
-  }, [featuredKey]);
 
   const go = useCallback(
     (delta) => {
@@ -100,4 +93,11 @@ export default function StoreHeroCarousel({ games }) {
       )}
     </div>
   );
+}
+
+export default function StoreHeroCarousel({ games }) {
+  const featured = useMemo(() => games.slice(0, FEATURED_COUNT), [games]);
+  const featuredKey = featured.map((g) => g.id).join(',');
+
+  return <StoreHeroCarouselInner key={featuredKey} featured={featured} />;
 }

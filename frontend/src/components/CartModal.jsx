@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api, formatGamePrice } from '../api/client';
 import { useAuth } from '../context/AuthContext';
@@ -14,7 +14,7 @@ export default function CartModal({ onClose }) {
   const [buying, setBuying] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
       const [cart, profile] = await Promise.all([api.getCart(token), api.getProfile(token)]);
@@ -25,10 +25,28 @@ export default function CartModal({ onClose }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
-    load();
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const [cart, profile] = await Promise.all([api.getCart(token), api.getProfile(token)]);
+        if (!cancelled) {
+          setItems(cart);
+          setBalance(profile.balance);
+        }
+      } catch {
+        if (!cancelled) setItems([]);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [token]);
 
   const total = items.reduce((s, i) => s + i.price, 0);

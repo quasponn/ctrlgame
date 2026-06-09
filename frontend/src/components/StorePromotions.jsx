@@ -42,10 +42,28 @@ export default function StorePromotions() {
   };
 
   useEffect(() => {
-    load();
-    const onUpdate = () => load();
+    let cancelled = false;
+
+    const fetchPromos = async () => {
+      try {
+        const promos = await api.getPromotions(10);
+        if (!cancelled) setItems(Array.isArray(promos) ? promos : []);
+      } catch {
+        if (!cancelled) setItems([]);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    fetchPromos();
+    const onUpdate = () => {
+      load();
+    };
     window.addEventListener(GAMES_UPDATED_EVENT, onUpdate);
-    return () => window.removeEventListener(GAMES_UPDATED_EVENT, onUpdate);
+    return () => {
+      cancelled = true;
+      window.removeEventListener(GAMES_UPDATED_EVENT, onUpdate);
+    };
   }, [load]);
 
   useEffect(() => {

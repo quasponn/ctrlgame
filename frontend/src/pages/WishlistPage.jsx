@@ -26,9 +26,35 @@ export default function WishlistPage() {
   }, [token, refreshGameState]);
 
   useEffect(() => {
-    if (!isAuth) return;
-    load().finally(() => setLoading(false));
-  }, [isAuth, load]);
+    if (!isAuth) return undefined;
+
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const [list, catalog] = await Promise.all([
+          api.getWishlist(token),
+          api.getCatalog({ limit: 48 }),
+        ]);
+        if (cancelled) return;
+        const catalogMap = new Map((catalog.items || []).map((g) => [g.id, g]));
+        setGames(
+          list.map((g) => ({
+            ...g,
+            ...(catalogMap.get(g.id) || {}),
+            genres: catalogMap.get(g.id)?.genres || [],
+          }))
+        );
+        await refreshGameState();
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isAuth, token, refreshGameState]);
 
   if (!isAuth) return <Navigate to="/login" replace />;
 

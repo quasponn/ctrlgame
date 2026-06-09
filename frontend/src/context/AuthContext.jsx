@@ -111,10 +111,6 @@ export function AuthProvider({ children }) {
     };
   }, [clearSession, refreshGameState]);
 
-  useEffect(() => {
-    if (sessionReady && token) refreshGameState();
-  }, [sessionReady, token, refreshGameState]);
-
   const login = async (user, pass) => {
     const data = await api.login(user, pass);
     persistSession({ token: data.token, refreshToken: data.refreshToken, username: user });
@@ -184,6 +180,7 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');

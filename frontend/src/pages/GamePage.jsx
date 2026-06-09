@@ -22,18 +22,40 @@ export default function GamePage() {
   const [comment, setComment] = useState('');
   const [msg, setMsg] = useState('');
 
-  const loadReviews = () => api.getGameReviews(id).then(setReviews);
-
   useEffect(() => {
-    api.getGame(id).then(setGame);
-    api.getGameGenres(id).then(setGenres);
-    loadReviews();
-    setPatchesLoading(true);
-    api
-      .getGamePatches(id)
-      .then(setPatches)
-      .catch(() => setPatches([]))
-      .finally(() => setPatchesLoading(false));
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const [gameData, genresData, reviewsData] = await Promise.all([
+          api.getGame(id),
+          api.getGameGenres(id),
+          api.getGameReviews(id),
+        ]);
+        if (cancelled) return;
+        setGame(gameData);
+        setGenres(genresData);
+        setReviews(reviewsData);
+
+        try {
+          const patchesData = await api.getGamePatches(id);
+          if (!cancelled) setPatches(patchesData);
+        } catch {
+          if (!cancelled) setPatches([]);
+        } finally {
+          if (!cancelled) setPatchesLoading(false);
+        }
+      } catch {
+        if (!cancelled) {
+          setGame(null);
+          setPatchesLoading(false);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   const gameId = game ? Number(game.id) : null;
@@ -80,7 +102,8 @@ export default function GamePage() {
       await api.addReview(id, { rating: Number(rating), comment }, token);
       setMsg('Отзыв добавлен!');
       setComment('');
-      loadReviews();
+      const nextReviews = await api.getGameReviews(id);
+      setReviews(nextReviews);
     } catch (err) {
       setMsg(err.message);
     }

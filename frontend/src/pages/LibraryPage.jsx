@@ -5,15 +5,61 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import GamePatchesSection from '../components/GamePatchesSection';
 
+function LibraryGameDetails({ game }) {
+  const [genresText, setGenresText] = useState('');
+  const [patches, setPatches] = useState([]);
+  const [patchesLoading, setPatchesLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const genres = await api.getGameGenres(game.id);
+        if (!cancelled) {
+          setGenresText(genres.length ? genres.map((x) => x.name).join(', ') : '');
+        }
+      } catch {
+        if (!cancelled) setGenresText('');
+      }
+
+      try {
+        const patchList = await api.getGamePatches(game.id);
+        if (!cancelled) setPatches(patchList);
+      } catch {
+        if (!cancelled) setPatches([]);
+      } finally {
+        if (!cancelled) setPatchesLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [game.id]);
+
+  return (
+    <>
+      {genresText && (
+        <div className="steam-detail-genres">
+          <b>Жанры:</b> {genresText}
+        </div>
+      )}
+      <GamePatchesSection
+        patches={patches}
+        loading={patchesLoading}
+        className="game-patches-section--library"
+      />
+    </>
+  );
+}
+
 export default function LibraryPage() {
   const { token, isAuth } = useAuth();
   const { toast } = useToast();
   const [games, setGames] = useState([]);
   const [selected, setSelected] = useState(null);
   const [search, setSearch] = useState('');
-  const [genresText, setGenresText] = useState('');
-  const [patches, setPatches] = useState([]);
-  const [patchesLoading, setPatchesLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,19 +77,6 @@ export default function LibraryPage() {
       })
       .finally(() => setLoading(false));
   }, [isAuth, token]);
-
-  useEffect(() => {
-    if (!selected) return;
-    api.getGameGenres(selected.id).then((g) => {
-      setGenresText(g.length ? g.map((x) => x.name).join(', ') : '');
-    });
-    setPatchesLoading(true);
-    api
-      .getGamePatches(selected.id)
-      .then(setPatches)
-      .catch(() => setPatches([]))
-      .finally(() => setPatchesLoading(false));
-  }, [selected]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -167,16 +200,7 @@ export default function LibraryPage() {
               <p className="steam-detail-desc">
                 {selected.description || 'Описание отсутствует.'}
               </p>
-              {genresText && (
-                <div className="steam-detail-genres">
-                  <b>Жанры:</b> {genresText}
-                </div>
-              )}
-              <GamePatchesSection
-                patches={patches}
-                loading={patchesLoading}
-                className="game-patches-section--library"
-              />
+              <LibraryGameDetails key={selected.id} game={selected} />
             </div>
           </>
         )}

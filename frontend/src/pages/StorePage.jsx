@@ -129,15 +129,31 @@ export default function StorePage() {
   }, [searchQuery, genreId, sort, page, isAuth, refreshGameState]);
 
   useEffect(() => {
-    loadHero();
-    api.getGenres().then(setGenres);
-  }, [loadHero]);
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const data = await api.getCatalog({ limit: 8 });
+        if (!cancelled) setHeroGames(data.items || []);
+      } catch {
+        if (!cancelled) setHeroGames([]);
+      }
+    })();
+
+    api.getGenres().then((list) => {
+      if (!cancelled) setGenres(list);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const delay = searchQuery.trim() ? 300 : 0;
     const timer = setTimeout(loadCatalog, delay);
     return () => clearTimeout(timer);
-  }, [loadCatalog]);
+  }, [loadCatalog, searchQuery]);
 
   useEffect(() => {
     if (isAuth) refreshGameState();

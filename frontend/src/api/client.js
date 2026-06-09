@@ -106,12 +106,7 @@ async function fetchCatalog(params = {}) {
     const games = await request('/games');
     const enriched = await Promise.all(
       games.map(async (g) => {
-        let genres = [];
-        try {
-          genres = await request(`/games/${g.id}/genres`);
-        } catch {
-          genres = [];
-        }
+        const genres = await request(`/games/${g.id}/genres`).catch(() => []);
         return { ...g, genres, avg_rating: null, review_count: 0 };
       })
     );

@@ -25,10 +25,15 @@ export default function ProfilePage() {
   const [pwd, setPwd] = useState({ current: '', next: '', confirm: '' });
   const [pwdSaving, setPwdSaving] = useState(false);
 
-  const load = () =>
+  useEffect(() => {
+    if (!isAuth) return undefined;
+
+    let cancelled = false;
+
     api
       .getProfile(token)
       .then((data) => {
+        if (cancelled) return;
         setUser(data);
         setForm({
           first_name: data.first_name || '',
@@ -37,10 +42,13 @@ export default function ProfilePage() {
           avatar_url: data.avatar_url || '',
         });
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
 
-  useEffect(() => {
-    if (isAuth) load();
+    return () => {
+      cancelled = true;
+    };
   }, [isAuth, token]);
 
   const startEdit = () => {

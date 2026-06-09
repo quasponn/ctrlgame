@@ -1,13 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { DEFAULT_COVER } from '../api/client';
 
-export default function GameMediaGallery({ images, title }) {
-  const list = images?.length ? images : [DEFAULT_COVER];
+function GameMediaGalleryInner({ list, title }) {
   const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    setIndex(0);
-  }, [images]);
 
   const go = useCallback(
     (delta) => {
@@ -76,4 +71,11 @@ export default function GameMediaGallery({ images, title }) {
       </div>
     </section>
   );
+}
+
+export default function GameMediaGallery({ images, title }) {
+  const list = images?.length ? images : [DEFAULT_COVER];
+  const listKey = list.join('|');
+
+  return <GameMediaGalleryInner key={listKey} list={list} title={title} />;
 }
